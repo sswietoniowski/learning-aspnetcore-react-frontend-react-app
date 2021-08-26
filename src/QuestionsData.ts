@@ -44,6 +44,14 @@ const questions: QuestionData[] = [
     created: new Date(),
     answers: [],
   },
+  {
+    questionId: 3,
+    title: 'Which framework is better React or Angular',
+    content: 'What to choose for a new project',
+    userName: 'Bob',
+    created: new Date(),
+    answers: [],
+  },
 ];
 
 export const getUnansweredQuestions = (): QuestionData[] => {
