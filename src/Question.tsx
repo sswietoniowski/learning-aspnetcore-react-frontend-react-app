@@ -6,7 +6,7 @@ interface Props {
   showContent?: boolean;
 }
 
-export const Question = ({ data, showContent }: Props) => (
+export const Question = ({ data, showContent = true }: Props) => (
   <div>
     <div>{data.title}</div>
     {showContent && (
@@ -23,3 +23,7 @@ export const Question = ({ data, showContent }: Props) => (
     </div>
   </div>
 );
+
+Question.defaultProps = {
+  showContent: true,
+};
