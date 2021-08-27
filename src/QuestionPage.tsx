@@ -5,6 +5,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Page } from './Page';
 import { QuestionData, getQuestion } from './QuestionsData';
+import { AnswerList } from './AnswerList';
 
 export const QuestionPage = () => {
   const [question, setQuestion] = React.useState<QuestionData | null>(null);
@@ -59,6 +60,7 @@ export const QuestionPage = () => {
                 ${question.created.toLocaleDateString()}
                 ${question.created.toLocaleTimeString()}`}
             </div>
+            <AnswerList data={question.answers} />
           </React.Fragment>
         )}
       </div>
