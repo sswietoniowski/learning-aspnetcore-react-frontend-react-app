@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
-
 import { css } from '@emotion/react';
 import { gray2, gray3 } from './Styles';
+
 import React from 'react';
 import { QuestionData } from './QuestionsData';
+
 import { Link } from 'react-router-dom';
 
 interface Props {
@@ -17,22 +18,16 @@ export const Question = ({ data, showContent = true }: Props) => (
       padding: 10px 0px;
     `}
   >
-    <div
+    <Link
       css={css`
-        padding: 10px 0px;
-        font-size: 19px;
+        text-decoration: none;
+        color: ${gray2};
       `}
+      to={`/questions/${data.questionId}`}
     >
-      <Link
-        css={css`
-          text-decoration: none;
-          color: ${gray2};
-        `}
-        to={`/questions/${data.questionId}`}
-      >
-        {data.title}
-      </Link>
-    </div>
+      {data.title}
+    </Link>
+
     {showContent && (
       <div
         css={css`
@@ -53,13 +48,8 @@ export const Question = ({ data, showContent = true }: Props) => (
         color: ${gray3};
       `}
     >
-      {`Asked by ${data.userName} on 
-        ${data.created.toLocaleDateString()}
-        ${data.created.toLocaleTimeString()}`}
+      {`Asked by ${data.userName} on
+        ${data.created.toLocaleDateString()} ${data.created.toLocaleTimeString()}`}
     </div>
   </div>
 );
-
-Question.defaultProps = {
-  showContent: true,
-};

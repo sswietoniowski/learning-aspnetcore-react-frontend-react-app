@@ -15,10 +15,11 @@ export const Header = () => {
   const { register, handleSubmit } = useForm<FormData>();
   const [searchParams] = useSearchParams();
   const criteria = searchParams.get('criteria') || '';
-  const [search, setSearch] = React.useState(criteria);
+
   const submitForm = ({ search }: FormData) => {
     navigate(`search?criteria=${search}`);
   };
+
   return (
     <div
       css={css`
@@ -48,7 +49,8 @@ export const Header = () => {
       </Link>
       <form onSubmit={handleSubmit(submitForm)}>
         <input
-          {...register('search')}
+          ref={register}
+          name="search"
           type="text"
           placeholder="Search..."
           defaultValue={criteria}
@@ -70,7 +72,7 @@ export const Header = () => {
         />
       </form>
       <Link
-        to="signin"
+        to="./signin"
         css={css`
           font-family: ${fontFamily};
           font-size: ${fontSize};
@@ -88,13 +90,7 @@ export const Header = () => {
         `}
       >
         <UserIcon />
-        <span
-          css={css`
-            margin-left: 7px;
-          `}
-        >
-          Sign In
-        </span>
+        <span>Sign In</span>
       </Link>
     </div>
   );

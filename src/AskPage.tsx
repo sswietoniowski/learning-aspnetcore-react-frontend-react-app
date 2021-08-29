@@ -20,16 +20,11 @@ type FormData = {
 };
 
 export const AskPage = () => {
-  const [successfullySubmitted, setSuccessfullySubmitted] =
-    React.useState(false);
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    formState,
-  } = useForm<FormData>({
+  const { register, errors, handleSubmit, formState } = useForm<FormData>({
     mode: 'onBlur',
   });
+  const [successfullySubmitted, setSuccessfullySubmitted] =
+    React.useState(false);
   const submitForm = async (data: FormData) => {
     const result = await postQuestion({
       title: data.title,
@@ -39,6 +34,7 @@ export const AskPage = () => {
     });
     setSuccessfullySubmitted(result ? true : false);
   };
+
   return (
     <Page title="Ask a question">
       <form onSubmit={handleSubmit(submitForm)}>
@@ -47,8 +43,9 @@ export const AskPage = () => {
             <FieldLabel htmlFor="title">Title</FieldLabel>
             <FieldInput
               id="title"
+              name="title"
               type="text"
-              {...register('title', {
+              ref={register({
                 required: true,
                 minLength: 10,
               })}
@@ -56,7 +53,6 @@ export const AskPage = () => {
             {errors.title && errors.title.type === 'required' && (
               <FieldError>You must enter the question title</FieldError>
             )}
-
             {errors.title && errors.title.type === 'minLength' && (
               <FieldError>The title must be at least 10 characters</FieldError>
             )}
@@ -65,7 +61,8 @@ export const AskPage = () => {
             <FieldLabel htmlFor="content">Content</FieldLabel>
             <FieldTextArea
               id="content"
-              {...register('content', {
+              name="content"
+              ref={register({
                 required: true,
                 minLength: 50,
               })}
@@ -92,4 +89,5 @@ export const AskPage = () => {
     </Page>
   );
 };
+
 export default AskPage;
