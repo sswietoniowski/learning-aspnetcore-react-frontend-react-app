@@ -24,11 +24,11 @@ export const AskPage = () => {
         <Fieldset>
           <FieldContainer>
             <FieldLabel htmlFor="title">Title</FieldLabel>
-            <FieldInput id="title" name="title" type="text" ref={register} />
+            <FieldInput id="title" type="text" {...register('title')} />
           </FieldContainer>
           <FieldContainer>
             <FieldLabel htmlFor="content">Content</FieldLabel>
-            <FieldTextArea id="content" name="content" ref={register} />
+            <FieldTextArea id="content" {...register('content')} />
           </FieldContainer>
           <FormButtonContainer>
             <PrimaryButton type="submit">Submit Your Question</PrimaryButton>

@@ -47,8 +47,7 @@ export const Header = () => {
       </Link>
       <form onSubmit={handleSubmit}>
         <input
-          ref={register}
-          name="search"
+          {...register('search')}
           type="text"
           placeholder="Search..."
           defaultValue={criteria}
