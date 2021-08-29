@@ -9,15 +9,18 @@ import {
   FieldTextArea,
   FormButtonContainer,
   PrimaryButton,
+  SubmissionSuccess,
 } from './Styles';
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Page } from './Page';
-import { QuestionData, getQuestion } from './QuestionsData';
+import { QuestionData, getQuestion, postAnswer } from './QuestionsData';
 import { AnswerList } from './AnswerList';
 import { useForm } from 'react-hook-form';
 
 export const QuestionPage = () => {
+  const [successfullySubmitted, setSuccessfullySubmitted] =
+    React.useState(false);
   const [question, setQuestion] = React.useState<QuestionData | null>(null);
   const { questionId } = useParams();
   React.useEffect(() => {
@@ -29,7 +32,23 @@ export const QuestionPage = () => {
       doGetQuestion(Number(questionId));
     }
   }, [questionId]);
-  const { register } = useForm<FormData>();
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    formState,
+  } = useForm<FormData>({
+    mode: 'onBlur',
+  });
+  const submitForm = async (data: FormData) => {
+    const result = await postAnswer({
+      questionId: question!.questionId,
+      content: data.content,
+      userName: 'Fred',
+      created: new Date(),
+    });
+    setSuccessfullySubmitted(result ? true : false);
+  };
   return (
     <Page>
       <div
@@ -73,20 +92,31 @@ export const QuestionPage = () => {
             </div>
             <AnswerList data={question.answers} />
             <form
+              onSubmit={handleSubmit(submitForm)}
               css={css`
                 margin-top: 20px;
               `}
             >
-              <Fieldset>
+              <Fieldset
+                disabled={formState.isSubmitting || successfullySubmitted}
+              >
                 <FieldContainer>
                   <FieldLabel htmlFor="content">Your Answer</FieldLabel>
-                  <FieldTextArea id="content" name="content" {...register} />
+                  <FieldTextArea
+                    id="content"
+                    {...register('content', { required: true })}
+                  />
                 </FieldContainer>
                 <FormButtonContainer>
                   <PrimaryButton type="submit">
                     Submit Your Answer
                   </PrimaryButton>
                 </FormButtonContainer>
+                {successfullySubmitted && (
+                  <SubmissionSuccess>
+                    Your answer was successfully submitted
+                  </SubmissionSuccess>
+                )}
               </Fieldset>
             </form>
           </React.Fragment>
