@@ -1,4 +1,5 @@
 import { QuestionData } from './QuestionsData';
+import { Store, createStore, combineReducers } from 'redux';
 
 interface QuestionsState {
   readonly loading: boolean;
@@ -123,3 +124,12 @@ const questionsReducer = (
   }
   return state;
 };
+
+const rootReducer = combineReducers<AppState>({
+  questions: questionsReducer,
+});
+
+export function configureStore(): Store<AppState> {
+  const store = createStore(rootReducer, undefined);
+  return store;
+}
