@@ -11,7 +11,7 @@ export interface AppState {
   readonly questions: QuestionsState;
 }
 
-const initialQuestionsState: QuestionsState = {
+const initialQuestionState: QuestionsState = {
   loading: false,
   unanswered: [],
   viewing: null,
@@ -65,3 +65,61 @@ export const searchedQuestionsAction = (questions: QuestionData[]) =>
 
     questions,
   } as const);
+
+type QuestionsActions =
+  | ReturnType<typeof gettingUnansweredQuestionsAction>
+  | ReturnType<typeof gotUnansweredQuestionsAction>
+  | ReturnType<typeof gettingQuestionAction>
+  | ReturnType<typeof gotQuestionAction>
+  | ReturnType<typeof searchingQuestionsAction>
+  | ReturnType<typeof searchedQuestionsAction>;
+
+const questionsReducer = (
+  state = initialQuestionState,
+  action: QuestionsActions,
+) => {
+  switch (action.type) {
+    case GETTINGUNANSWEREDQUESTIONS: {
+      return {
+        ...state,
+        loading: true,
+      };
+    }
+    case GOTUNANSWEREDQUESTIONS: {
+      return {
+        ...state,
+        unanswered: action.questions,
+        loading: false,
+      };
+    }
+    case GETTINGQUESTION: {
+      return {
+        ...state,
+        viewing: null,
+        loading: true,
+      };
+    }
+    case GOTQUESTION: {
+      return {
+        ...state,
+        viewing: action.question,
+        loading: false,
+      };
+    }
+    case SEARCHINGQUESTIONS: {
+      return {
+        ...state,
+        searched: [],
+        loading: true,
+      };
+    }
+    case SEARCHEDQUESTIONS: {
+      return {
+        ...state,
+        searched: action.questions,
+        loading: false,
+      };
+    }
+  }
+  return state;
+};
