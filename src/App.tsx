@@ -1,25 +1,23 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { fontFamily, fontSize, gray2 } from './Styles';
-import logo from './logo.svg';
 import React from 'react';
-import { Provider } from 'react-redux';
-import { configureStore } from './Store';
 
 import { Header } from './Header';
 import { HomePage } from './HomePage';
+
+import { fontFamily, fontSize, gray2 } from './Styles';
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { SearchPage } from './SearchPage';
 import { SignInPage } from './SignInPage';
 import { SignOutPage } from './SignOutPage';
-import { AuthProvider } from './Auth';
 import { NotFoundPage } from './NotFoundPage';
 import { QuestionPage } from './QuestionPage';
 
-const AskPage = React.lazy(() => import('./AskPage'));
+import { AuthProvider } from './Auth';
+import { AuthorizedPage } from './AuthorizedPage';
 
-const store = configureStore();
+const AskPage = React.lazy(() => import('./AskPage'));
 
 function App() {
   return (
@@ -51,7 +49,9 @@ function App() {
                     </div>
                   }
                 >
-                  <AskPage />
+                  <AuthorizedPage>
+                    <AskPage />
+                  </AuthorizedPage>
                 </React.Suspense>
               }
             />
@@ -65,8 +65,8 @@ function App() {
               path="/signout-callback"
               element={<SignOutPage action="signout-callback" />}
             />
-            <Route path="questions/:questionId" element={<QuestionPage />} />
             <Route path="*" element={<NotFoundPage />} />
+            <Route path="questions/:questionId" element={<QuestionPage />} />
           </Routes>
         </div>
       </BrowserRouter>
