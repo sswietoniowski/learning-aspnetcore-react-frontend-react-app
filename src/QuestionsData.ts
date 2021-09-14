@@ -90,9 +90,14 @@ const wait = (ms: number): Promise<void> => {
 export const getQuestion = async (
   questionId: number,
 ): Promise<QuestionData | null> => {
-  await wait(500);
-  const results = questions.filter((q) => q.questionId === questionId);
-  return results.length === 0 ? null : results[0];
+  const result = await http<QuestionDataFromServer>({
+    path: `/questions/${questionId}`,
+  });
+  if (result.ok && result.body) {
+    return mapQuestionFromServer(result.body);
+  } else {
+    return null;
+  }
 };
 
 export const getUnansweredQuestions = async (): Promise<QuestionData[]> => {
