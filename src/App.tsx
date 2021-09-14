@@ -12,6 +12,8 @@ import { HomePage } from './HomePage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { SearchPage } from './SearchPage';
 import { SignInPage } from './SignInPage';
+import { SignOutPage } from './SignOutPage';
+import { AuthProvider } from './Auth';
 import { NotFoundPage } from './NotFoundPage';
 import { QuestionPage } from './QuestionPage';
 
@@ -21,7 +23,7 @@ const store = configureStore();
 
 function App() {
   return (
-    <Provider store={store}>
+    <AuthProvider>
       <BrowserRouter>
         <div
           css={css`
@@ -68,7 +70,7 @@ function App() {
           </Routes>
         </div>
       </BrowserRouter>
-    </Provider>
+    </AuthProvider>
   );
 }
 
