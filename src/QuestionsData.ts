@@ -1,3 +1,5 @@
+import { http } from './http';
+
 export interface AnswerData {
   answerId: number;
   content: string;
@@ -13,6 +15,33 @@ export interface QuestionData {
   created: Date;
   answers: AnswerData[];
 }
+
+export interface QuestionDataFromServer {
+  questionId: number;
+  title: string;
+  content: string;
+  userName: string;
+  created: string;
+  answers: Array<{
+    answerId: number;
+    content: string;
+    userName: string;
+    created: string;
+  }>;
+}
+
+export const mapQuestionFromServer = (
+  question: QuestionDataFromServer,
+): QuestionData => ({
+  ...question,
+  created: new Date(question.created),
+  answers: question.answers
+    ? question.answers.map((answer) => ({
+        ...answer,
+        created: new Date(answer.created),
+      }))
+    : [],
+});
 
 const questions: QuestionData[] = [
   {
@@ -67,15 +96,14 @@ export const getQuestion = async (
 };
 
 export const getUnansweredQuestions = async (): Promise<QuestionData[]> => {
-  let unansweredQuestions: QuestionData[] = [];
-  const response = await fetch(
-    'http://localhost:5000/api/questions/unanswered',
-  );
-  unansweredQuestions = await response.json();
-  return unansweredQuestions.map((question) => ({
-    ...question,
-    created: new Date(question.created),
-  }));
+  const result = await http<QuestionDataFromServer[]>({
+    path: '/questions/unanswered',
+  });
+  if (result.ok && result.body) {
+    return result.body.map(mapQuestionFromServer);
+  } else {
+    return [];
+  }
 };
 
 export const searchQuestions = async (
