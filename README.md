@@ -1,5 +1,7 @@
 # Learning ASP.NET Core and React
 
+This code is a bit outdated and as such should not be used.
+
 This repository contains only frontend code (that is React App).
 
 Based on this book [ASP.NET Core 5 and React - Second Edition](https://learning.oreilly.com/library/view/asp-net-core-5/9781800206168/).
